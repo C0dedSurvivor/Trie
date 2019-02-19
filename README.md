@@ -5,10 +5,12 @@ A trie data structure that stores and searches through a 10000 word dictionary
 A trie has a similar structure to a tree, with nodes storing the data and a separate class storing all of the nodes along with the add and searching function. <br />
 The node itself stores two pieces of data:
 * A boolean value
-* An array of 26 other trie nodes
+* An array of 26 other trie nodes <br />
+
 The boolean value tells the search function whether this node marks the end of a valid word if the search ends on it. <br />
 The array represents the valid next letters that can be moved to from this one <br /> <br />
 The trie class contains the head trie node and 3 functions
+
 * AddItem: Adds a given string to the trie
 * Contains: Checks to see if the trie contains a given string
 * GetValue: Translates a given lowercase letter into a corresponding number between 0 and 25
