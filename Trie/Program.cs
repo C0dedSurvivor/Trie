@@ -33,6 +33,8 @@ namespace Trie
                     //Checks if the trie contains the given value and outputs the result
                     Console.WriteLine("Does the trie contain " + input + ": " + MyTrie.Contains(input));
                 }
+                else
+                    Console.WriteLine("Invalid input, this trie only supports the basic english alphabet.");
                 Console.WriteLine("Enter a word to search or /q to quit");
                 input = Console.ReadLine();
             }
