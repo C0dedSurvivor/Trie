@@ -76,6 +76,11 @@ namespace Trie
             return false;
         }
 
+        /// <summary>
+        /// Gets a list of all words with a given prefix in the trie
+        /// </summary>
+        /// <param name="prefix">The prefix to search for</param>
+        /// <returns>The list of words with the given prefix</returns>
         public List<string> GetAllWithPrefix(string prefix)
         {
             //Starts tracing the prefix at the head node
@@ -93,22 +98,32 @@ namespace Trie
                 //Grabs the node that represents the next letter in the sequence
                 node = node[GetValue(c)];
             }
+            //Grabs the list of all valid words beyond this in the trie
             List<string> children = GetAllValidChildren(node, prefix);
+            //If there are no valid words after the search, let the player know
             if(children.Count == 0)
                 children.Add("No words with this prefix exist in the given trie.");
             return children;
         }
 
+        /// <summary>
+        /// Gets all the valid words that are linked to a given node
+        /// </summary>
+        /// <param name="node">The node to search from</param>
+        /// <param name="start">What this node represents in the overall tree</param>
+        /// <returns>The list of words beyond this node in the trie</returns>
         private List<string> GetAllValidChildren(TrieNode node, string start)
         {
             List<string> list = new List<string>();
             //Checks this word's node to see if it is a valid word end
             if (node.valid)
                 list.Add(start);
+            //For each node in this one's array
             for(int i = 0; i < 26; i++)
             {
                 if(node[i] != null)
                 {
+                    //Calls this function for all of this node's children and adds what it returns to the master list
                     List<string> children = GetAllValidChildren(node[i], start + GetChar(i));
                     foreach (string s in children)
                     {
