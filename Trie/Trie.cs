@@ -25,11 +25,11 @@ namespace Trie
             item = item.ToLower();
             //Stores the numerical representation of the current letter to check for
             int value;
-            //Run for every character in the string except the last one
-            for(int place = 0; place < item.Length; place++)
+            //Run for every character in the string
+            foreach(char c in item)
             {
                 //Grab the numerical representation of the current letter to check for
-                value = GetValue(item[place]);
+                value = GetValue(c);
                 //If the node that represents the next letter in the sequence doesn't exist, create it
                 if (node[value] == null)
                     node[value] = new TrieNode();
@@ -52,18 +52,18 @@ namespace Trie
             TrieNode node = head;
             //Turns the item lowercase for simplicity
             item = item.ToLower();
-            //Run for every character in the string except the last one
-            for (int place = 0; place < item.Length; place++)
+            //Run for every character in the string
+            foreach (char c in item)
             {
-                Console.Write(item[place] + "->");
+                Console.Write(c + "->");
                 //If the node representing the next letter in the sequence doesn't exist, the word doesn't exist in the trie
-                if (node[GetValue(item[place])] == null)
+                if (node[GetValue(c)] == null)
                 {
                     Console.Write("Doesn't Exist\n");
                     return false;
                 }
                 //Grabs the node that represents the next letter in the sequence
-                node = node[GetValue(item[place])];
+                node = node[GetValue(c)];
             }
             //Checks the final letter's node to see if it is a valid word end
             if (node.valid)
@@ -76,10 +76,67 @@ namespace Trie
             return false;
         }
 
-        //Translates a lower-case letter into an integer representation in the range 0-25
+        public List<string> GetAllWithPrefix(string prefix)
+        {
+            //Starts tracing the prefix at the head node
+            TrieNode node = head;
+            //Turns the item lowercase for simplicity
+            prefix = prefix.ToLower();
+            //Run for every character in the prefix
+            foreach (char c in prefix)
+            {
+                //If the node representing the next letter in the sequence doesn't exist, the prefix doesn't exist in the trie
+                if (node[GetValue(c)] == null)
+                {
+                    return new List<string>() { "No words with this prefix exist in the given trie." };
+                }
+                //Grabs the node that represents the next letter in the sequence
+                node = node[GetValue(c)];
+            }
+            List<string> children = GetAllValidChildren(node, prefix);
+            if(children.Count == 0)
+                children.Add("No words with this prefix exist in the given trie.");
+            return children;
+        }
+
+        private List<string> GetAllValidChildren(TrieNode node, string start)
+        {
+            List<string> list = new List<string>();
+            //Checks this word's node to see if it is a valid word end
+            if (node.valid)
+                list.Add(start);
+            for(int i = 0; i < 26; i++)
+            {
+                if(node[i] != null)
+                {
+                    List<string> children = GetAllValidChildren(node[i], start + GetChar(i));
+                    foreach (string s in children)
+                    {
+                        list.Add(s);
+                    }
+                }
+            }
+            return list;
+        }
+        
+        /// <summary>
+        /// Translates a lower-case letter into an integer representation in the range 0-25
+        /// </summary>
+        /// <param name="c">The character to translate</param>
+        /// <returns>An integer between 0-25 inclusive</returns>
         public static int GetValue(char c)
         {
             return c - 97;
+        }
+
+        /// <summary>
+        /// Translates a number in the range 0-25 back into its character equivalent
+        /// </summary>
+        /// <param name="i">The integer to translate</param>
+        /// <returns>A character in the range a-z</returns>
+        public static char GetChar(int i)
+        {
+            return (char)(i + 97);
         }
     }
 }

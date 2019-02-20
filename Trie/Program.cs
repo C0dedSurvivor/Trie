@@ -16,7 +16,7 @@ namespace Trie
         {
             Trie MyTrie = new Trie();
             string line;
-            StreamReader file = new StreamReader("words.txt");
+            StreamReader file = new StreamReader("../../../words.txt");
             //Grabs the words one by one from words.txt and adds them to the trie
             while ((line = file.ReadLine()) != null)
             {
@@ -36,6 +36,27 @@ namespace Trie
                 else
                     Console.WriteLine("Invalid input, this trie only supports the basic english alphabet.");
                 Console.WriteLine("Enter a word to search or /q to quit");
+                input = Console.ReadLine();
+            }
+
+            Console.WriteLine("\nEnter a prefix to search for all words with that prefix or /q to quit");
+            input = Console.ReadLine();
+            while (input != "/q")
+            {
+                //Makes sure the input is only letters, which is the only valid format for this trie
+                if (input.All(char.IsLetter))
+                {
+                    List<string> list = MyTrie.GetAllWithPrefix(input);
+                    //Checks if the trie contains any words with the given prefix and outputs the results
+                    for(int i = 0; i < list.Count - 1; i++)
+                    {
+                        Console.Write(list[i] + ", ");
+                    }
+                    Console.WriteLine(list[list.Count - 1]);
+                }
+                else
+                    Console.WriteLine("Invalid input, this trie only supports the basic english alphabet.");
+                Console.WriteLine("Enter a prefix to search for all words with that prefix or /q to quit");
                 input = Console.ReadLine();
             }
         }
